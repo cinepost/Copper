@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -23,42 +24,31 @@ import com.redsoft.copperfx.ui.*;
  */
 
 public class CopperFX extends Application {
-	 Map<String, Desktop> desktops = new HashMap<String, Desktop>(); 
+
+	private DesktopManager desktopManager;
 
 	public CopperFX() {
-    //Optional constructor
-    System.out.println("constructor");
+    desktopManager = new DesktopManager();
   }
 
   @Override
   public void start(Stage primaryStage) {
   	primaryStage.setTitle("CopperFX App");
 
-  	// load desktop FXML definitions
-  	System.out.println("loading desktops ...");
-
-  	File desktopsDirectory = new File("/Users/max/dev/Copper/resource/desktops");
-  	String [] desktopsDirectoryContents = desktopsDirectory.list();
-
-  	for (String filename : desktopsDirectoryContents) {
-  		Desktop desktop = new Desktop(new File(String.valueOf(desktopsDirectory), filename));
-  		desktops.put(desktop.getId(), desktop);
-		}
-
 		// build desktops menu
-    Menu desktops_menu = new Menu("Desktop");
+    Menu desktopsMenu = new Menu("Desktop");
     
     // create desktop menu items
-    for (Map.Entry<String, Desktop> entry : desktops.entrySet()) {
-    	String desktopTitle = entry.getKey(); 
-			desktopTitle = desktopTitle.substring(0,1).toUpperCase() + desktopTitle.substring(1).toLowerCase();
-    	MenuItem m = new MenuItem(desktopTitle);
-    	m.setOnAction(new EventHandler<ActionEvent>() {
+    for ( String desktopName : desktopManager.desktopNames()) {
+    	String desktopMenuEntryTitle = desktopName.substring(0,1).toUpperCase() + desktopName.substring(1).toLowerCase();
+    	MenuItem menuItem = new MenuItem(desktopMenuEntryTitle);
+
+    	menuItem.setOnAction(new EventHandler<ActionEvent>() {
     		@Override public void handle(ActionEvent e) {
-      		//System.out.println("Setting desktop: " + desktopTitle);
+    			desktopManager.showDesktop(desktopName);
     		}
 			});
-    	desktops_menu.getItems().add(m);
+    	desktopsMenu.getItems().add(menuItem);
 		} 
 
 
@@ -79,16 +69,19 @@ public class CopperFX extends Application {
 		}
   
     // add menu to menubar 
-    menuBar.getMenus().add(desktops_menu);
+    menuBar.getMenus().add(desktopsMenu);
 
     // main vbox layout
-    VBox vBox = new VBox(menuBar);
-    vBox.getChildren().addAll(toolBar);
+    VBox vBox = new VBox(); // main window layout
+    vBox.setStyle("-fx-background-color: green;"); // for layouts testing
+    vBox.getChildren().addAll(menuBar, toolBar);
 
     // set default desktop to main layout 
-    vBox.getChildren().addAll(desktops.get("build"));
+    vBox.getChildren().add(desktopManager);
+    VBox.setVgrow(desktopManager, Priority.ALWAYS); // ensure desktop manager pane uses all available layout space
 
     // create app window and set style
+    Group root = new Group();
     Scene scene = new Scene(vBox, 800, 600);
     scene.getStylesheets().add("default.css");
 
