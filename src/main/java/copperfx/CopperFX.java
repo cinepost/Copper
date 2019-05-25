@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -15,8 +17,13 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.redsoft.copperfx.ui.*;
+
+/* Main CopperFX application class.
+ */
+
 public class CopperFX extends Application {
-	 Map<String, javafx.scene.layout.VBox> desktops = new HashMap(); 
+	 Map<String, Desktop> desktops = new HashMap<String, Desktop>(); 
 
 	public CopperFX() {
     //Optional constructor
@@ -28,40 +35,29 @@ public class CopperFX extends Application {
   	primaryStage.setTitle("CopperFX App");
 
   	// load desktop FXML definitions
-  	System.out.println("loading desktops...");
+  	System.out.println("loading desktops ...");
 
-  	FXMLLoader loader = new FXMLLoader();
   	File desktopsDirectory = new File("/Users/max/dev/Copper/resource/desktops");
   	String [] desktopsDirectoryContents = desktopsDirectory.list();
 
   	for (String filename : desktopsDirectoryContents) {
-    	File temp = new File(String.valueOf(desktopsDirectory), filename);
-    	try{
-    		URL url = new URL(temp.toURI().toString());
-    		System.out.println("loading desktop definition: " + url);
-
-    		try {
-    			loader.setLocation(url);
-    			VBox desktop = loader.<VBox>load();
-    			desktops.put(desktop.getId(), desktop); 
-    			System.out.println("desktop: " + desktop.getId() + " loaded"); 
-    		}catch(IOException ex) {
-    			//do exception handling here
-    			System.out.println(ex); 
-    		}
-    	}catch(MalformedURLException ex){
-				//do exception handling here
-			}
+  		Desktop desktop = new Desktop(new File(String.valueOf(desktopsDirectory), filename));
+  		desktops.put(desktop.getId(), desktop);
 		}
 
 		// build desktops menu
     Menu desktops_menu = new Menu("Desktop");
     
     // create desktop menu items
-    for (Map.Entry<String, javafx.scene.layout.VBox> entry : desktops.entrySet()) {
+    for (Map.Entry<String, Desktop> entry : desktops.entrySet()) {
     	String desktopTitle = entry.getKey(); 
 			desktopTitle = desktopTitle.substring(0,1).toUpperCase() + desktopTitle.substring(1).toLowerCase();
     	MenuItem m = new MenuItem(desktopTitle);
+    	m.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override public void handle(ActionEvent e) {
+      		//System.out.println("Setting desktop: " + desktopTitle);
+    		}
+			});
     	desktops_menu.getItems().add(m);
 		} 
 
@@ -89,8 +85,8 @@ public class CopperFX extends Application {
     VBox vBox = new VBox(menuBar);
     vBox.getChildren().addAll(toolBar);
 
-    // set desktop to main layout 
-    //vBox.getChildren().addAll(hBox);
+    // set default desktop to main layout 
+    vBox.getChildren().addAll(desktops.get("build"));
 
     // create app window and set style
     Scene scene = new Scene(vBox, 800, 600);
@@ -110,6 +106,10 @@ public class CopperFX extends Application {
     }).start();
   }
 
+  public void switchToDesktop(String desktopName) {
+
+  }
+
   @Override
   public void stop() {
 		//By default this does nothing
@@ -126,56 +126,3 @@ public class CopperFX extends Application {
 		launch();
 	}
 }
-
-/*public class CopperFX extends Application {
-  public CopperFX() {
-    //Optional constructor
-  }
-  @Override
-  public void init() {
-		//By default this does nothing, but it
-		//can carry out code to set up your app.
-		//It runs once before the start method,
-		//and after the constructor.
-  }
-  
-  @Override
-  public void start(Stage primaryStage) {
-		String javaVersion = System.getProperty("java.version");
-		String javafxVersion = System.getProperty("javafx.version");
-
-		// Creating the Java button
-		final Button button = new Button();
-		// Setting text to button
-		button.setText("Hello World");
-		// Registering a handler for button
-		button.setOnAction((ActionEvent event) -> {
-			// Printing Hello World! to the console
-			System.out.println("Hello World!");
-		});
-		// Initializing the StackPane class
-		final StackPane root = new StackPane();
-		// Adding all the nodes to the StackPane
-		root.getChildren().add(button);
-		// Creating a scene object
-		final Scene scene = new Scene(root, 300, 250);
-		// Adding the title to the window (primaryStage)
-		primaryStage.setTitle("Hello World!");
-		primaryStage.setScene(scene);
-		// Show the window(primaryStage)
-		primaryStage.show();
-  }
-  @Override
-  public void stop() {
-		//By default this does nothing
-		//It runs if the user clicks the go-away button
-		//closing the window or if Platform.exit() is called.
-		//Use Platform.exit() instead of System.exit(0).
-		//This is where you should offer to save any unsaved
-		//stuff that the user may have generated.
-  }
-
-  public static void main(String[] args) {
-		launch();
-	}
-}*/

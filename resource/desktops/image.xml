@@ -3,11 +3,10 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import com.redsoft.copperfx.ui.*?>
 
-<fx:root id="build" type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml">
-	<Label text="Build desktop"/>
+<fx:root id="image" type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml">
+	<Label text="Image desktop"/>
   <TextField fx:id="textField"/>
   <Button text="Click Me" onAction="#doSomething"/>
-  <PaneManager/>
 </fx:root>
+
