@@ -6,12 +6,17 @@ plugins {
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.7'
   id "edu.sc.seis.macAppBundle" version "2.3.0"
+  //id "com.github.cr0.macappbundle" version "3.0.1"
 }
 
 mainClassName = 'com.redsoft.copperfx.CopperFX'
 
 macAppBundle {
-    mainClassName = 'com.redsoft.copperfx.CopperFX'
+  appName = "CopperFX"
+  icon = "media/icons/copperfx_icon.icns"
+  mainClassName = 'com.redsoft.copperfx.CopperFX'
+  bundleExtras.put("NSHighResolutionCapable", "true")
+  javaProperties.put("apple.laf.useScreenMenuBar", "true")
 }
 
 sourceCompatibility = '1.8'
@@ -40,6 +45,7 @@ dependencies {
 
 apply plugin: "org.openjfx.javafxplugin"
 apply plugin: "edu.sc.seis.macAppBundle"
+//apply plugin: "com.github.cr0.macappbundle"
 
 javafx {
     version = "12.0.1"

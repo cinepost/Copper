@@ -29,7 +29,7 @@ public class DesktopManager extends javafx.scene.layout.Pane {
     // load desktop FXML definitions
     logger.debug("loading desktop fxml definitions ...");
 
-    File desktopsDirectory = new File("/Users/max/dev/Copper/resource/desktops");
+    File desktopsDirectory = new File("/Users/max/dev/Copper/resources/desktops");
     String [] desktopsDirectoryContents = desktopsDirectory.list();
 
     for (String filename : desktopsDirectoryContents) {
