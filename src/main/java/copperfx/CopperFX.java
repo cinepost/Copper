@@ -65,6 +65,7 @@ public class CopperFX extends Application {
     // create a menubar 
     MenuBar menuBar = new MenuBar();
     if( System.getProperty("os.name","UNKNOWN").equals("Mac OS X")) {
+    	// in case of MacOS app we put it on a system bar to look more like a native application
   		menuBar.setUseSystemMenuBar(true);
 		}
   

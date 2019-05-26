@@ -5,9 +5,14 @@ plugins {
   id 'eclipse'
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.7'
+  id "edu.sc.seis.macAppBundle" version "2.3.0"
 }
 
 mainClassName = 'com.redsoft.copperfx.CopperFX'
+
+macAppBundle {
+    mainClassName = 'org.gradle.sample.Main'
+}
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -23,7 +28,6 @@ dependencies {
   //String jimgui_version = 'v0.7'
   //compile "org.ice1000.jimgui:core:$jimgui_version" // basic functionality
   //compile "org.ice1000.jimgui:kotlin-dsl:$jimgui_version" // kotlin dsl wrapper
-
   compile 'de.jensd:shichimifx:1.2.3'
  
   compile 'com.apple:AppleJavaExtensions:1.4'
@@ -35,6 +39,7 @@ dependencies {
 }
 
 apply plugin: "org.openjfx.javafxplugin"
+apply plugin: "edu.sc.seis.macAppBundle"
 
 javafx {
     version = "12.0.1"
