@@ -11,7 +11,7 @@ plugins {
 mainClassName = 'com.redsoft.copperfx.CopperFX'
 
 macAppBundle {
-    mainClassName = 'org.gradle.sample.Main'
+    mainClassName = 'com.redsoft.copperfx.CopperFX'
 }
 
 sourceCompatibility = '1.8'
